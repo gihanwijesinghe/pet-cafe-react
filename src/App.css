@@ -13,6 +13,21 @@
   }
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.headerApp {
+  text-align: center;
+  font-size: 2rem;
+  padding: 1rem;
+  background-color: aqua;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
