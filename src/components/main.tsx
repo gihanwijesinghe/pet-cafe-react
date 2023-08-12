@@ -3,7 +3,7 @@ import Header from "./header";
 import { Route, Routes } from "react-router-dom";
 import NotFoundView from "./notFound";
 import Home from "./home";
-import Cafes from "./cafes";
+import Cafes from "./cafe/cafes";
 import Employees from "./employees";
 
 const Main: React.FC = () => {
