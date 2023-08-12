@@ -1,9 +1,10 @@
 import React from "react";
 import Header from "./header";
 import { Route, Routes } from "react-router-dom";
-import BlogView from "./blogs";
 import NotFoundView from "./notFound";
 import Home from "./home";
+import Cafes from "./cafes";
+import Employees from "./employees";
 
 const Main: React.FC = () => {
   return (
@@ -11,7 +12,8 @@ const Main: React.FC = () => {
       <Header />
       <Routes>
         <Route path="/" Component={Home}></Route>
-        <Route path="blogs" Component={BlogView}></Route>
+        <Route path="cafes" Component={Cafes}></Route>
+        <Route path="employees" Component={Employees}></Route>
         <Route path="*" Component={NotFoundView}></Route>
       </Routes>
     </>
