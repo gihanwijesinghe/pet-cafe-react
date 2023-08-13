@@ -12,6 +12,10 @@ export interface CafePost {
   location: string;
 }
 
+export interface CafePut extends CafePost {
+  id: number;
+}
+
 const CafeService = {
   getCafes: () => {
     return fetch("https://localhost:7122/api/cafes")
@@ -29,6 +33,25 @@ const CafeService = {
     return fetch("https://localhost:7122/api/cafes", requestOptions)
       .then((res) => res.json())
       .then((res) => res as any);
+  },
+
+  putCafe: (cafePut: CafePut) => {
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(cafePut),
+    };
+
+    return fetch(`https://localhost:7122/api/cafes/${cafePut.id}`, requestOptions);
+  },
+
+  deleteCafe: (id: string) => {
+    const requestOptions = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    return fetch(`https://localhost:7122/api/cafes/${id}`, requestOptions);
   },
 };
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { GridCellParams, GridColDef, GridRowModel } from "@mui/x-data-grid";
+import { GridCellParams, GridColDef, GridRowId, GridRowModel } from "@mui/x-data-grid";
 import DataTable from "../common.tsx/dataTable";
 import { useSearchParams } from "react-router-dom";
 import EmployeeService, { EmployeeGender, EmployeePost, EmployeeResponse } from "../../services/employeeService";
@@ -66,12 +66,23 @@ const Employees: React.FC = () => {
     if (row.isNew) {
       const emp = await EmployeeService.postEmployee(post);
       return { ...row, id: emp.id, daysWorked: 1, cafe: cafe };
+    } else {
+      await EmployeeService.putEmployee({ ...post, id: row.id });
+      return { ...row };
     }
+  };
+
+  const onRowDelete = async (id: GridRowId) => {
+    await EmployeeService.deleteEmployee(id.toString());
   };
 
   return (
     <div className="container">
-      {loading ? <>Loading...</> : <DataTable rows={employees} colums={columns} onRowUpdate={onRowUpdate} />}
+      {loading ? (
+        <>Loading...</>
+      ) : (
+        <DataTable rows={employees} colums={columns} onRowUpdate={onRowUpdate} onRowDelete={onRowDelete} />
+      )}
     </div>
   );
 };

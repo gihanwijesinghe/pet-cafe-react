@@ -1,6 +1,6 @@
 import React from "react";
 import CafeService, { CafePost, CafeResponse } from "../../services/cafeService";
-import { GridCellParams, GridColDef, GridRowModel } from "@mui/x-data-grid";
+import { GridCellParams, GridColDef, GridRowId, GridRowModel } from "@mui/x-data-grid";
 import DataTable from "../common.tsx/dataTable";
 import { Link } from "react-router-dom";
 
@@ -44,12 +44,23 @@ const Cafes: React.FC = () => {
     if (row.isNew) {
       await CafeService.postCafe(post);
       return { ...row, employeesCount: 0 };
+    } else {
+      await CafeService.putCafe({ ...post, id: row.id });
+      return { ...row };
     }
+  };
+
+  const onRowDelete = async (id: GridRowId) => {
+    await CafeService.deleteCafe(id.toString());
   };
 
   return (
     <div className="container">
-      {loading ? <>Loading...</> : <DataTable rows={cafes} colums={columns} onRowUpdate={onRowUpdate} />}
+      {loading ? (
+        <>Loading...</>
+      ) : (
+        <DataTable rows={cafes} colums={columns} onRowUpdate={onRowUpdate} onRowDelete={onRowDelete} />
+      )}
     </div>
   );
 };

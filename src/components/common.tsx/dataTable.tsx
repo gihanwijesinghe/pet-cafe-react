@@ -55,6 +55,7 @@ export interface DataTableProps {
   rows: GridRowsProp;
   colums: GridColDef[];
   onRowUpdate?: (row: GridRowModel) => Promise<any>;
+  onRowDelete?: (row: GridRowId) => Promise<void>;
 }
 
 const DataTable: React.FC<DataTableProps> = (props) => {
@@ -72,11 +73,11 @@ const DataTable: React.FC<DataTableProps> = (props) => {
   };
 
   const handleSaveClick = (id: GridRowId) => () => {
-    console.log("save " + id);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id: GridRowId) => () => {
+  const handleDeleteClick = (id: GridRowId) => async () => {
+    props.onRowDelete && (await props.onRowDelete(id));
     setRows(rows.filter((row) => row.id !== id));
   };
 
