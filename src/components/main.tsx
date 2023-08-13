@@ -5,6 +5,7 @@ import NotFoundView from "./notFound";
 import Home from "./home";
 import Cafes from "./cafe/cafes";
 import Employees from "./employee/employees";
+import CreateCafe from "./cafe/createCafe";
 
 const Main: React.FC = () => {
   return React.useMemo(
@@ -14,6 +15,7 @@ const Main: React.FC = () => {
         <Routes>
           <Route path="/" Component={Home}></Route>
           <Route path="cafes" Component={Cafes}></Route>
+          <Route path="cafes/create" Component={CreateCafe}></Route>
           <Route path="employees" Component={Employees}></Route>
           <Route path="*" Component={NotFoundView}></Route>
         </Routes>

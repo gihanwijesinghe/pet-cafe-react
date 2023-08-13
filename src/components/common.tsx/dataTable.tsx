@@ -19,6 +19,7 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import { randomId } from "@mui/x-data-grid-generator";
+import { Link } from "react-router-dom";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -40,7 +41,10 @@ function EditToolbar(props: EditToolbarProps) {
   return (
     <GridToolbarContainer>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
+        Add record inline
+      </Button>
+      <Button color="primary" startIcon={<AddIcon />}>
+        <Link to={`/cafes/create`}>Add record from page</Link>
       </Button>
     </GridToolbarContainer>
   );
