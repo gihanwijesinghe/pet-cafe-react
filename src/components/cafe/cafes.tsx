@@ -9,10 +9,7 @@ const Cafes: React.FC = () => {
   const [cafes, setCafes] = React.useState<CafeResponse[]>([]);
 
   React.useEffect(() => {
-    setLoading(true);
-    CafeService.getCafes()
-      .then((res) => setCafes(res))
-      .finally(() => setLoading(false));
+    onSearch();
   }, []);
 
   const columns: GridColDef[] = [
@@ -54,12 +51,26 @@ const Cafes: React.FC = () => {
     await CafeService.deleteCafe(id.toString());
   };
 
+  const onSearch = (txt?: string) => {
+    setLoading(true);
+    CafeService.getCafes(txt)
+      .then((res) => setCafes(res))
+      .finally(() => setLoading(false));
+  };
+
   return (
     <div className="container">
       {loading ? (
         <>Loading...</>
       ) : (
-        <DataTable rows={cafes} colums={columns} onRowUpdate={onRowUpdate} onRowDelete={onRowDelete} />
+        <DataTable
+          rows={cafes}
+          colums={columns}
+          onRowUpdate={onRowUpdate}
+          onRowDelete={onRowDelete}
+          searchPlaceHolder={"Search by cafe"}
+          onSeach={onSearch}
+        />
       )}
     </div>
   );

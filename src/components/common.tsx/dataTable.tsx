@@ -1,6 +1,7 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
+import Search from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
@@ -20,14 +21,16 @@ import {
 } from "@mui/x-data-grid";
 import { randomId } from "@mui/x-data-grid-generator";
 import { Link } from "react-router-dom";
+import { Grid, IconButton, Input, InputBase } from "@mui/material";
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
   setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
 }
 
-function EditToolbar(props: EditToolbarProps) {
+function EditToolbar(props: EditToolbarProps, searchPlaceholder?: string, onSearch?: (s: string) => void) {
   const { setRows, setRowModesModel } = props;
+  const [txt, setTxt] = React.useState<string>("");
 
   const handleClick = () => {
     const id = randomId();
@@ -38,14 +41,30 @@ function EditToolbar(props: EditToolbarProps) {
     }));
   };
 
+  const onSearchClick = () => {
+    onSearch && onSearch(txt);
+  };
+
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record inline
-      </Button>
-      <Button color="primary" startIcon={<AddIcon />}>
-        <Link to={`/cafes/create`}>Add record from page</Link>
-      </Button>
+      <Grid container justifyContent={"space-between"}>
+        <Grid item>
+          <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+            Add record inline
+          </Button>
+          <Button color="primary" startIcon={<AddIcon />}>
+            <Link to={`/cafes/create`}>Add record from page</Link>
+          </Button>
+        </Grid>
+        {onSearch && (
+          <Grid item>
+            <Input placeholder={searchPlaceholder ?? "Search"} onChange={(e) => setTxt(e.target.value)} />
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search" onClick={onSearchClick}>
+              <Search />
+            </IconButton>
+          </Grid>
+        )}
+      </Grid>
     </GridToolbarContainer>
   );
 }
@@ -55,6 +74,8 @@ export interface DataTableProps {
   colums: GridColDef[];
   onRowUpdate?: (row: GridRowModel) => Promise<any>;
   onRowDelete?: (row: GridRowId) => Promise<void>;
+  searchPlaceHolder?: string;
+  onSeach?: (searchText?: string) => void;
 }
 
 const DataTable: React.FC<DataTableProps> = (props) => {
@@ -167,7 +188,7 @@ const DataTable: React.FC<DataTableProps> = (props) => {
       onRowEditStop={handleRowEditStop}
       processRowUpdate={processRowUpdate}
       slots={{
-        toolbar: EditToolbar,
+        toolbar: (p: EditToolbarProps) => EditToolbar(p, props.searchPlaceHolder, props.onSeach),
       }}
       slotProps={{
         toolbar: { setRows, setRowModesModel },

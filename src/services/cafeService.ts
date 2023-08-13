@@ -17,8 +17,8 @@ export interface CafePut extends CafePost {
 }
 
 const CafeService = {
-  getCafes: () => {
-    return fetch("https://localhost:7122/api/cafes")
+  getCafes: (location?: string) => {
+    return fetch(`https://localhost:7122/api/cafes?location=${location ?? ""}`)
       .then((res) => res.json())
       .then((res) => res as CafeResponse[]);
   },
