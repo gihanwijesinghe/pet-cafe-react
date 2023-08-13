@@ -24,6 +24,10 @@ const CreateCafe: React.FC = () => {
     return form.name.length > 0 && form.description.length > 0 && form.location.length > 0;
   };
 
+  const onCancel = () => {
+    navigate("/cafes");
+  };
+
   return (
     <Grid style={{ paddingTop: 20 }} container spacing={2} direction={"column"} alignContent={"center"}>
       <Grid item>
@@ -57,13 +61,22 @@ const CreateCafe: React.FC = () => {
         ></TextField>
       </Grid>
       <Grid item>
-        {loading ? (
-          <>Loading...</>
-        ) : (
-          <Button variant="contained" disabled={!formValidation()} onClick={handleSubmit}>
-            Submit
-          </Button>
-        )}
+        <Grid container spacing={2}>
+          <Grid item>
+            <Button variant="contained" color="warning" onClick={onCancel}>
+              Cancel
+            </Button>
+          </Grid>
+          <Grid item>
+            {loading ? (
+              <>Loading...</>
+            ) : (
+              <Button variant="contained" disabled={!formValidation()} onClick={handleSubmit}>
+                Submit
+              </Button>
+            )}
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );
