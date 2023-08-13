@@ -2,6 +2,7 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import Search from "@mui/icons-material/Search";
+import DoubleArrow from "@mui/icons-material/DoubleArrow";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
@@ -28,7 +29,12 @@ interface EditToolbarProps {
   setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
 }
 
-function EditToolbar(props: EditToolbarProps, searchPlaceholder?: string, onSearch?: (s: string) => void) {
+function EditToolbar(
+  props: EditToolbarProps,
+  addRecordPage?: string,
+  searchPlaceholder?: string,
+  onSearch?: (s: string) => void
+) {
   const { setRows, setRowModesModel } = props;
   const [txt, setTxt] = React.useState<string>("");
 
@@ -52,9 +58,11 @@ function EditToolbar(props: EditToolbarProps, searchPlaceholder?: string, onSear
           <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
             Add record inline
           </Button>
-          <Button color="primary" startIcon={<AddIcon />}>
-            <Link to={`/cafes/create`}>Add record from page</Link>
-          </Button>
+          {addRecordPage && (
+            <Button color="primary" startIcon={<AddIcon />}>
+              <Link to={addRecordPage}>Add record from page</Link>
+            </Button>
+          )}
         </Grid>
         {onSearch && (
           <Grid item>
@@ -76,6 +84,8 @@ export interface DataTableProps {
   onRowDelete?: (row: GridRowId) => Promise<void>;
   searchPlaceHolder?: string;
   onSeach?: (searchText?: string) => void;
+  onEditNewPage?: (id: GridRowId) => void;
+  addRecordPage?: string;
 }
 
 const DataTable: React.FC<DataTableProps> = (props) => {
@@ -90,6 +100,10 @@ const DataTable: React.FC<DataTableProps> = (props) => {
 
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleEditClickNewPage = (id: GridRowId) => () => {
+    props.onEditNewPage && props.onEditNewPage(id);
   };
 
   const handleSaveClick = (id: GridRowId) => () => {
@@ -172,6 +186,16 @@ const DataTable: React.FC<DataTableProps> = (props) => {
               onClick={handleDeleteClick(id)}
               color="inherit"
             />,
+
+            <GridActionsCellItem
+              icon={props.onEditNewPage ? <DoubleArrow /> : <></>}
+              label="Edit With New Page"
+              className="textPrimary"
+              onClick={handleEditClickNewPage(id)}
+              color="inherit"
+            >
+              Edit With New Page
+            </GridActionsCellItem>,
           ];
         },
       },
@@ -188,7 +212,7 @@ const DataTable: React.FC<DataTableProps> = (props) => {
       onRowEditStop={handleRowEditStop}
       processRowUpdate={processRowUpdate}
       slots={{
-        toolbar: (p: EditToolbarProps) => EditToolbar(p, props.searchPlaceHolder, props.onSeach),
+        toolbar: (p: EditToolbarProps) => EditToolbar(p, props.addRecordPage, props.searchPlaceHolder, props.onSeach),
       }}
       slotProps={{
         toolbar: { setRows, setRowModesModel },

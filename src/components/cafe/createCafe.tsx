@@ -2,9 +2,11 @@ import { Button, Grid, TextField } from "@mui/material";
 import React from "react";
 import CafeService, { CafePost } from "../../services/cafeService";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const CreateCafe: React.FC = () => {
   const navigate = useNavigate();
+  const state = useSelector((state) => state);
 
   const [loading, setLoading] = React.useState(false);
   const [form, setForm] = React.useState<CafePost>({

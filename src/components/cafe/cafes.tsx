@@ -1,10 +1,15 @@
 import React from "react";
-import CafeService, { CafePost, CafeResponse } from "../../services/cafeService";
+import CafeService, { CafePost, CafePut, CafeResponse } from "../../services/cafeService";
 import { GridCellParams, GridColDef, GridRowId, GridRowModel } from "@mui/x-data-grid";
 import DataTable from "../common.tsx/dataTable";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addItem } from "../../store/cafeAction";
 
 const Cafes: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = React.useState<boolean>(true);
   const [cafes, setCafes] = React.useState<CafeResponse[]>([]);
 
@@ -58,6 +63,12 @@ const Cafes: React.FC = () => {
       .finally(() => setLoading(false));
   };
 
+  const onRowEditClick = (id: GridRowId) => {
+    const cafe = cafes.find((c) => c.id === id);
+    cafe && dispatch(addItem(cafe as CafePut));
+    navigate("/cafes/create");
+  };
+
   return (
     <div className="container">
       {loading ? (
@@ -70,6 +81,8 @@ const Cafes: React.FC = () => {
           onRowDelete={onRowDelete}
           searchPlaceHolder={"Search by cafe"}
           onSeach={onSearch}
+          onEditNewPage={onRowEditClick}
+          addRecordPage={"`/cafes/create`"}
         />
       )}
     </div>

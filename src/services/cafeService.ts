@@ -13,7 +13,7 @@ export interface CafePost {
 }
 
 export interface CafePut extends CafePost {
-  id: number;
+  id: string;
 }
 
 const CafeService = {
