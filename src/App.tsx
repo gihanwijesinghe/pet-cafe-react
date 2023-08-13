@@ -5,12 +5,12 @@ import Home from "./components/home";
 import { BrowserRouter } from "react-router-dom";
 import Main from "./components/main";
 
-function App() {
+const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Main />
     </BrowserRouter>
   );
-}
+};
 
-export default App;
+export default React.memo(App);

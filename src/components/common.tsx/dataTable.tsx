@@ -1,5 +1,4 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -159,34 +158,21 @@ const DataTable: React.FC<DataTableProps> = (props) => {
   };
 
   return (
-    <Box
-      sx={{
-        height: 800,
-        width: "100%",
-        "& .actions": {
-          color: "text.secondary",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
+    <DataGrid
+      rows={rows}
+      columns={getColumns()}
+      editMode="row"
+      rowModesModel={rowModesModel}
+      onRowModesModelChange={handleRowModesModelChange}
+      onRowEditStop={handleRowEditStop}
+      processRowUpdate={processRowUpdate}
+      slots={{
+        toolbar: EditToolbar,
       }}
-    >
-      <DataGrid
-        rows={rows}
-        columns={getColumns()}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
-        }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel },
-        }}
-      />
-    </Box>
+      slotProps={{
+        toolbar: { setRows, setRowModesModel },
+      }}
+    />
   );
 };
 

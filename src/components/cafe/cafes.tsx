@@ -2,17 +2,19 @@ import React from "react";
 import CafeService, { CafePost, CafeResponse } from "../../services/cafeService";
 import { GridCellParams, GridColDef, GridRowModel } from "@mui/x-data-grid";
 import DataTable from "../common.tsx/dataTable";
-import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Cafes: React.FC = () => {
   const [loading, setLoading] = React.useState<boolean>(true);
   const [cafes, setCafes] = React.useState<CafeResponse[]>([]);
 
   React.useEffect(() => {
+    setLoading(true);
     CafeService.getCafes()
       .then((res) => setCafes(res))
       .finally(() => setLoading(false));
   }, []);
+
   const columns: GridColDef[] = [
     { field: "name", headerName: "Name", width: 180, editable: true },
     {
@@ -26,7 +28,9 @@ const Cafes: React.FC = () => {
       headerName: "Employees",
       width: 180,
       editable: false,
-      renderCell: (params: GridCellParams) => <Button>{params.value as any}</Button>,
+      renderCell: (params: GridCellParams) => (
+        <Link to={`/employees?cafe=${params.row.name}&cafeId=${params.row.id}`}>{params.value as any}</Link>
+      ),
     },
     { field: "location", headerName: "Location", width: 180, editable: true },
   ];
