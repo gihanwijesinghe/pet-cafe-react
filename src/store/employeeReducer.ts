@@ -2,7 +2,7 @@ import { ADD_ITEM, DELETE_ITEM } from "./cafeAction";
 import { ReduxAction } from "./cafeReducer";
 
 const initialState = {
-  employeePut: {},
+  employeeResponse: {},
 };
 
 const EmployeeReducer = (state = initialState, action: ReduxAction) => {
@@ -10,13 +10,13 @@ const EmployeeReducer = (state = initialState, action: ReduxAction) => {
     case ADD_ITEM:
       return {
         ...state,
-        employeePut: action.payload,
+        employeeResponse: action.payload,
       };
 
     case DELETE_ITEM:
       return {
         ...state,
-        employeePut: {},
+        employeeResponse: {},
       };
     default:
       return state;

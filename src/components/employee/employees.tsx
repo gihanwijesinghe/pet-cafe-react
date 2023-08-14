@@ -88,7 +88,7 @@ const Employees: React.FC = () => {
 
   const onRowEditClick = (id: GridRowId) => {
     const employee = employees.find((c) => c.id === id);
-    employee && dispatch(addItem(employee as EmployeePut));
+    employee && dispatch(addItem(employee));
     navigate("/employees/create?edit=true");
   };
 
