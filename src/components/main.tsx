@@ -6,7 +6,7 @@ import Home from "./home";
 import Cafes from "./cafe/cafes";
 import Employees from "./employee/employees";
 import CreateCafe from "./cafe/createCafe";
-import CreateEmployee from "./cafe/createCafe";
+import CreateEmployee from "./employee/createEmployee";
 
 const Main: React.FC = () => {
   return React.useMemo(

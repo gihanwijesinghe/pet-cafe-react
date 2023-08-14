@@ -1,92 +1,115 @@
+import { Button, Grid, TextField } from "@mui/material";
 import React from "react";
-import CafeService, { CafePost, CafePut, CafeResponse } from "../../services/cafeService";
-import { GridCellParams, GridColDef, GridRowId, GridRowModel } from "@mui/x-data-grid";
-import DataTable from "../common.tsx/dataTable";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addItem } from "../../store/cafeAction";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteItem } from "../../store/cafeAction";
+import EmployeeService, { EmployeeGender, EmployeePut } from "../../services/employeeService";
+import { CafePut } from "../../services/cafeService";
 
-const Cafes: React.FC = () => {
-  const dispatch = useDispatch();
+const CreateEmployee: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
 
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [cafes, setCafes] = React.useState<CafeResponse[]>([]);
+  const editMode = searchParams.get("edit") === "true";
+  const state = useSelector((state) => state);
+
+  const [loading, setLoading] = React.useState(false);
+  const [form, setForm] = React.useState<EmployeePut>({
+    name: "",
+    email: "",
+    phone: 0,
+    gender: EmployeeGender.None,
+    startDate: new Date(),
+    id: "",
+  });
 
   React.useEffect(() => {
-    onSearch();
-  }, []);
+    //console.log(JSON.stringify(state));
+    if (editMode) {
+      var employeeReducer = (state as any).EmployeeReducer;
+      setForm((employeeReducer as any).employeePut);
+    }
+  }, [editMode]);
 
-  const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", width: 180, editable: true },
-    {
-      field: "description",
-      headerName: "Description",
-      width: 180,
-      editable: true,
-    },
-    {
-      field: "employeesCount",
-      headerName: "Employees",
-      width: 180,
-      editable: false,
-      renderCell: (params: GridCellParams) => (
-        <Link to={`/employees?cafe=${params.row.name}&cafeId=${params.row.id}`}>{params.value as any}</Link>
-      ),
-    },
-    { field: "location", headerName: "Location", width: 180, editable: true },
-  ];
-
-  const onRowUpdate = async (row: GridRowModel) => {
-    const post: CafePost = {
-      name: row.name,
-      description: row.description,
-      location: row.location,
-    };
-    if (row.isNew) {
-      await CafeService.postCafe(post);
-      return { ...row, employeesCount: 0 };
-    } else {
-      await CafeService.putCafe({ ...post, id: row.id });
-      return { ...row };
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      if (editMode) {
+        await EmployeeService.putEmployee(form);
+        dispatch(deleteItem());
+      } else {
+        await EmployeeService.postEmployee(form);
+      }
+      navigate("/employees");
+    } catch {
+    } finally {
+      setLoading(false);
     }
   };
 
-  const onRowDelete = async (id: GridRowId) => {
-    await CafeService.deleteCafe(id.toString());
+  const formValidation = () => {
+    return form.name.length > 0 && form.email.length > 0 && form.phone.toString().length == 8;
   };
 
-  const onSearch = (txt?: string) => {
-    setLoading(true);
-    CafeService.getCafes(txt)
-      .then((res) => setCafes(res))
-      .finally(() => setLoading(false));
-  };
-
-  const onRowEditClick = (id: GridRowId) => {
-    const cafe = cafes.find((c) => c.id === id);
-    cafe && dispatch(addItem(cafe as CafePut));
-    navigate("/cafes/create?edit=true");
+  const onCancel = () => {
+    navigate("/employees");
   };
 
   return (
-    <div className="container">
-      {loading ? (
-        <>Loading...</>
-      ) : (
-        <DataTable
-          rows={cafes}
-          colums={columns}
-          onRowUpdate={onRowUpdate}
-          onRowDelete={onRowDelete}
-          searchPlaceHolder={"Search by cafe"}
-          onSeach={onSearch}
-          onEditNewPage={onRowEditClick}
-          addRecordPage={"/cafes/create"}
-        />
-      )}
-    </div>
+    <Grid style={{ paddingTop: 20 }} container spacing={2} direction={"column"} alignContent={"center"}>
+      <Grid item>
+        <TextField
+          label={"Name"}
+          value={form.name}
+          error={form.name.length <= 0}
+          onChange={(e: any) => {
+            setForm({ ...form, name: e.target.value });
+          }}
+        ></TextField>
+      </Grid>
+      <Grid item>
+        <TextField
+          label={"Email"}
+          type="email"
+          value={form.email}
+          error={form.email.length <= 0}
+          onChange={(e: any) => {
+            setForm({ ...form, email: e.target.value });
+          }}
+        ></TextField>
+      </Grid>
+      <Grid item>
+        <TextField
+          label={"Phone"}
+          value={form.phone}
+          error={form.phone.toString().length != 8}
+          onChange={(e: any) => {
+            setForm({ ...form, phone: e.target.value });
+          }}
+        ></TextField>
+      </Grid>
+
+      <Grid item>
+        <Grid container spacing={2}>
+          <Grid item>
+            <Button variant="contained" color="warning" onClick={onCancel}>
+              Cancel
+            </Button>
+          </Grid>
+          <Grid item>
+            {loading ? (
+              <>Loading...</>
+            ) : (
+              <Button variant="contained" disabled={!formValidation()} onClick={handleSubmit}>
+                Submit
+              </Button>
+            )}
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 
-export default Cafes;
+export default CreateEmployee;

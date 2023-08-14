@@ -3,9 +3,10 @@ import React from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteItem } from "../../store/cafeAction";
-import EmployeeService, { EmployeeGender, EmployeePut } from "../../services/employeeService";
+import EmployeeService, { EmployeeGender } from "../../services/employeeService";
+import CafeService, { CafePut } from "../../services/cafeService";
 
-const CreateEmployee: React.FC = () => {
+const CreateCafe: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
@@ -14,19 +15,17 @@ const CreateEmployee: React.FC = () => {
   const state = useSelector((state) => state);
 
   const [loading, setLoading] = React.useState(false);
-  const [form, setForm] = React.useState<EmployeePut>({
+  const [form, setForm] = React.useState<CafePut>({
     name: "",
-    email: "",
-    phone: 0,
+    description: "",
+    location: "",
     id: "",
-    gender: EmployeeGender.None,
-    startDate: new Date(),
   });
 
   React.useEffect(() => {
     if (editMode) {
-      var employee = (state as any).employeePUt;
-      setForm(employee);
+      var cafeReducer = (state as any).CafeReducer;
+      setForm((cafeReducer as any).cafePut);
     }
   }, [editMode]);
 
@@ -34,12 +33,12 @@ const CreateEmployee: React.FC = () => {
     setLoading(true);
     try {
       if (editMode) {
-        await EmployeeService.putEmployee(form);
+        await CafeService.putCafe(form);
         dispatch(deleteItem());
       } else {
-        await EmployeeService.postEmployee(form);
+        await CafeService.postCafe(form);
       }
-      navigate("/employees");
+      navigate("/cafes");
     } catch {
     } finally {
       setLoading(false);
@@ -47,11 +46,11 @@ const CreateEmployee: React.FC = () => {
   };
 
   const formValidation = () => {
-    return form.name.length > 0 && form.email.length > 0 && form.phone.toString().length == 8;
+    return form.name.length > 0 && form.description.length > 0 && form.location.length > 0;
   };
 
   const onCancel = () => {
-    navigate("/employees");
+    navigate("/cafes");
   };
 
   return (
@@ -68,22 +67,21 @@ const CreateEmployee: React.FC = () => {
       </Grid>
       <Grid item>
         <TextField
-          label={"Email"}
-          type="email"
-          value={form.email}
-          error={form.email.length <= 0}
+          label={"Description"}
+          value={form.description}
+          error={form.description.length <= 0}
           onChange={(e: any) => {
-            setForm({ ...form, email: e.target.value });
+            setForm({ ...form, description: e.target.value });
           }}
         ></TextField>
       </Grid>
       <Grid item>
         <TextField
-          label={"Phone"}
-          value={form.phone}
-          error={form.phone.toString().length != 8}
+          label={"Location"}
+          value={form.location}
+          error={form.location.toString().length <= 0}
           onChange={(e: any) => {
-            setForm({ ...form, phone: e.target.value });
+            setForm({ ...form, location: e.target.value });
           }}
         ></TextField>
       </Grid>
@@ -110,4 +108,4 @@ const CreateEmployee: React.FC = () => {
   );
 };
 
-export default CreateEmployee;
+export default CreateCafe;
