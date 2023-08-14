@@ -1,23 +1,38 @@
 import { Button, Grid, TextField } from "@mui/material";
 import React from "react";
-import CafeService, { CafePost } from "../../services/cafeService";
-import { useNavigate } from "react-router-dom";
+import CafeService, { CafePut } from "../../services/cafeService";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const CreateCafe: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const editMode = searchParams.get("edit") === "true";
   const state = useSelector((state) => state);
 
   const [loading, setLoading] = React.useState(false);
-  const [form, setForm] = React.useState<CafePost>({
+  const [form, setForm] = React.useState<CafePut>({
     name: "",
     description: "",
     location: "",
+    id: "",
   });
+
+  React.useEffect(() => {
+    if (editMode) {
+      var cafe = (state as any).cafePut;
+      setForm(cafe);
+    }
+  }, [editMode]);
 
   const handleSubmit = async () => {
     setLoading(true);
-    await CafeService.postCafe(form);
+    if (editMode) {
+      await CafeService.putCafe(form);
+    } else {
+      await CafeService.postCafe(form);
+    }
     setLoading(false);
     navigate("/cafes");
   };

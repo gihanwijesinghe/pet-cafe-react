@@ -66,7 +66,7 @@ const Cafes: React.FC = () => {
   const onRowEditClick = (id: GridRowId) => {
     const cafe = cafes.find((c) => c.id === id);
     cafe && dispatch(addItem(cafe as CafePut));
-    navigate("/cafes/create");
+    navigate("/cafes/create?edit=true");
   };
 
   return (
