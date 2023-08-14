@@ -12,7 +12,7 @@ import CafeService, { CafeResponse } from "../../services/cafeService";
 const CreateEmployee: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const editMode = searchParams.get("edit") === "true";
   const state = useSelector((state) => state);
@@ -40,7 +40,14 @@ const CreateEmployee: React.FC = () => {
     if (editMode) {
       var employeeReducer = (state as any).EmployeeReducer;
       var employeeResponse = (employeeReducer as any).employeeResponse;
-      setForm(employeeResponse);
+      if (employeeResponse.id) {
+        setForm(employeeResponse);
+      } else {
+        setSearchParams((params) => {
+          params.set("edit", "false");
+          return params;
+        });
+      }
     }
   }, [editMode]);
 

@@ -9,7 +9,7 @@ import CafeService, { CafePut } from "../../services/cafeService";
 const CreateCafe: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const editMode = searchParams.get("edit") === "true";
   const state = useSelector((state) => state);
@@ -25,7 +25,15 @@ const CreateCafe: React.FC = () => {
   React.useEffect(() => {
     if (editMode) {
       var cafeReducer = (state as any).CafeReducer;
-      setForm((cafeReducer as any).cafePut);
+      const cafe = (cafeReducer as any).cafePut;
+      if (cafe.id) {
+        setForm(cafe);
+      } else {
+        setSearchParams((params) => {
+          params.set("edit", "false");
+          return params;
+        });
+      }
     }
   }, [editMode]);
 
