@@ -1,6 +1,11 @@
-import { createStore } from "redux";
+import { combineReducers, createStore } from "redux";
 import CafeReducer from "./cafeReducer";
+import EmployeeReducer from "./employeeReducer";
 
-const store = createStore(CafeReducer);
+const rootReducer = combineReducers({
+  CafeReducer,
+  EmployeeReducer,
+});
+const store = createStore(rootReducer);
 
 export default store;

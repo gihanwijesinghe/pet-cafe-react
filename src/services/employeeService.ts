@@ -1,10 +1,7 @@
-export interface EmployeeResponse {
+export interface EmployeeResponse extends EmployeePost {
   id: string;
-  name: string;
   daysWorked: number;
   cafe: string;
-  email: string;
-  phone: number;
 }
 
 export interface EmployeePost {
@@ -17,7 +14,7 @@ export interface EmployeePost {
 }
 
 export interface EmployeePut extends EmployeePost {
-  id: number;
+  id: string;
 }
 
 export enum EmployeeGender {

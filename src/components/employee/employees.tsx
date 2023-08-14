@@ -1,11 +1,21 @@
 import React from "react";
 import { GridCellParams, GridColDef, GridRowId, GridRowModel } from "@mui/x-data-grid";
 import DataTable from "../common.tsx/dataTable";
-import { useSearchParams } from "react-router-dom";
-import EmployeeService, { EmployeeGender, EmployeePost, EmployeeResponse } from "../../services/employeeService";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import EmployeeService, {
+  EmployeeGender,
+  EmployeePost,
+  EmployeePut,
+  EmployeeResponse,
+} from "../../services/employeeService";
+import { useDispatch } from "react-redux";
+import { addItem } from "../../store/employeeAction";
 
 const Employees: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const cafe = searchParams.get("cafe");
   const cafeId = searchParams.get("cafeId");
 
@@ -76,12 +86,25 @@ const Employees: React.FC = () => {
     await EmployeeService.deleteEmployee(id.toString());
   };
 
+  const onRowEditClick = (id: GridRowId) => {
+    const employee = employees.find((c) => c.id === id);
+    employee && dispatch(addItem(employee as EmployeePut));
+    navigate("/employees/create?edit=true");
+  };
+
   return (
     <div className="container">
       {loading ? (
         <>Loading...</>
       ) : (
-        <DataTable rows={employees} colums={columns} onRowUpdate={onRowUpdate} onRowDelete={onRowDelete} />
+        <DataTable
+          rows={employees}
+          colums={columns}
+          onRowUpdate={onRowUpdate}
+          onRowDelete={onRowDelete}
+          onEditNewPage={onRowEditClick}
+          addRecordPage={"/employees/create"}
+        />
       )}
     </div>
   );
