@@ -13,6 +13,10 @@ const Header: React.FC = () => {
       <Link style={{ paddingLeft: 20 }} to="/employees">
         Employees
       </Link>
+
+      <Link style={{ paddingLeft: 20 }} to="/cafesaggrid">
+        Cafes Ag grid
+      </Link>
     </div>
   );
 };
