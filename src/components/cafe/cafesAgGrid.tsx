@@ -31,7 +31,9 @@ const CafesAgGrid: React.FC = () => {
       field: "employeesCount",
       headerName: "Employees",
       cellRendererFramework: (params: any) => {
-        return <Link to={`/employees?cafe=${params.data.name}&cafeId=${params.data.id}`}>{params.value as any}</Link>;
+        return (
+          <Link to={`/employeesaggrid?cafe=${params.data.name}&cafeId=${params.data.id}`}>{params.value as any}</Link>
+        );
       },
     },
     { field: "location", filter: true },
