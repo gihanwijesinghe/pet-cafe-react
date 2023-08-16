@@ -54,6 +54,7 @@ const EmployeesAgGrid: React.FC = () => {
       ) : (
         <AgGrid
           rows={employees}
+          title="Employees - Ag grid"
           columns={columnDefs}
           onEditClick={onEditClick}
           onAddItemClick={onAddItemClick}

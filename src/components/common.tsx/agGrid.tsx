@@ -11,10 +11,11 @@ export interface AgGridProps {
   onAddItemClick: () => void;
   onEditClick: (id: any) => void;
   onDeleteClick: (id: any) => Promise<void>;
+  title: string;
 }
 const AgGrid: React.FC<AgGridProps> = (props) => {
   const gridRef = React.useRef<any>(null);
-  const { rows, columns, onEditClick, onAddItemClick, onDeleteClick } = props;
+  const { rows, columns, onEditClick, onAddItemClick, onDeleteClick, title } = props;
 
   const [result, setResult] = React.useState(rows);
 
@@ -68,7 +69,7 @@ const AgGrid: React.FC<AgGridProps> = (props) => {
     <div className="ag-theme-alpine" style={{ height: 750, width: "75%" }}>
       <Grid container justifyContent={"space-between"} alignItems={"center"}>
         <Grid item>
-          <h2>Cafes - Ag grid</h2>
+          <h2>{title}</h2>
         </Grid>
         <Grid item>
           <Button variant="contained" onClick={onAddItemEdit}>
