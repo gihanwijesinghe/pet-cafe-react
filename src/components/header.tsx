@@ -7,9 +7,9 @@ const Header: React.FC = () => {
       <Link style={{ paddingLeft: 20 }} to="/">
         Home
       </Link>
-      <Link style={{ paddingLeft: 20 }} to="/cafes">
+      {/* <Link style={{ paddingLeft: 20 }} to="/cafes">
         Cafes
-      </Link>
+      </Link> */}
       <Link style={{ paddingLeft: 20 }} to="/employees">
         Employees
       </Link>

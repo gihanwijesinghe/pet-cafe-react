@@ -3,7 +3,6 @@ import React from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteItem } from "../../store/cafeAction";
-import EmployeeService, { EmployeeGender } from "../../services/employeeService";
 import CafeService, { CafePut } from "../../services/cafeService";
 
 const CreateCafe: React.FC = () => {
@@ -46,7 +45,7 @@ const CreateCafe: React.FC = () => {
       } else {
         await CafeService.postCafe(form);
       }
-      navigate("/cafes");
+      navigate("/cafesaggrid");
     } catch {
     } finally {
       setLoading(false);
@@ -58,11 +57,12 @@ const CreateCafe: React.FC = () => {
   };
 
   const onCancel = () => {
-    navigate("/cafes");
+    navigate("/cafesaggrid");
   };
 
   return (
     <Grid style={{ paddingTop: 20 }} container spacing={2} direction={"column"} alignContent={"center"}>
+      <h2>{editMode ? "Edit Cafe" : "Create Cafe"}</h2>
       <Grid item>
         <TextField
           label={"Name"}

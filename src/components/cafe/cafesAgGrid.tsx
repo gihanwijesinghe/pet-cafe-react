@@ -2,11 +2,16 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 import "ag-grid-community/styles/ag-grid.css";
 import React from "react";
 import AgGrid from "../common.tsx/agGrid";
-import CafeService, { CafeResponse } from "../../services/cafeService";
+import CafeService, { CafePut, CafeResponse } from "../../services/cafeService";
 import { ColDef } from "ag-grid-community";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addItem } from "../../store/cafeAction";
 
 const CafesAgGrid: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [loading, setLoading] = React.useState<boolean>(true);
   const [cafes, setCafes] = React.useState<CafeResponse[]>([]);
 
@@ -34,10 +39,33 @@ const CafesAgGrid: React.FC = () => {
     { field: "location", filter: true },
   ];
 
+  const onEditClick = (id: string) => {
+    const cafe = cafes.find((c) => c.id === id);
+    cafe && dispatch(addItem(cafe as CafePut));
+    navigate("/cafes/create?edit=true");
+  };
+
+  const onAddItemClick = () => {
+    navigate("/cafes/create");
+  };
+
+  const onDeleteClick = async (id: string) => {
+    await CafeService.deleteCafe(id.toString());
+  };
+
   return (
     <div className="container" style={{ fontSize: 20 }}>
-      <h2>Cafes - Ag grid</h2>
-      {loading ? <>Loading...</> : <AgGrid rows={cafes} columns={columnDefs}></AgGrid>}
+      {loading ? (
+        <>Loading...</>
+      ) : (
+        <AgGrid
+          rows={cafes}
+          columns={columnDefs}
+          onEditClick={onEditClick}
+          onAddItemClick={onAddItemClick}
+          onDeleteClick={onDeleteClick}
+        ></AgGrid>
+      )}
     </div>
   );
 };
