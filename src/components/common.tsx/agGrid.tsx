@@ -16,6 +16,8 @@ const AgGrid: React.FC<AgGridProps> = (props) => {
   const gridRef = React.useRef<any>(null);
   const { rows, columns, onEditClick, onAddItemClick, onDeleteClick } = props;
 
+  const [result, setResult] = React.useState(rows);
+
   const onClickEdit = (id: any) => {
     onEditClick(id);
   };
@@ -26,8 +28,8 @@ const AgGrid: React.FC<AgGridProps> = (props) => {
 
   const onClickDelete = async (id: any) => {
     try {
-      await onDeleteClick(id);
-      const toRemove = rows.find((r) => r.id === id);
+      onDeleteClick(id);
+      const toRemove = result.find((r) => r.id === id);
       gridRef.current.api.applyTransaction({ remove: [toRemove] });
     } catch {}
   };
@@ -77,7 +79,7 @@ const AgGrid: React.FC<AgGridProps> = (props) => {
 
       <AgGridReact
         ref={gridRef}
-        rowData={rows}
+        rowData={result}
         columnDefs={getColumns}
         animateRows={true}
         pagination={true}

@@ -8,6 +8,7 @@ import Employees from "./employee/employees";
 import CreateCafe from "./cafe/createCafe";
 import CreateEmployee from "./employee/createEmployee";
 import CafesAgGrid from "./cafe/cafesAgGrid";
+import EmployeesAgGrid from "./employee/employeesAgGrid";
 
 const Main: React.FC = () => {
   return React.useMemo(
@@ -20,6 +21,7 @@ const Main: React.FC = () => {
           <Route path="cafesaggrid" Component={CafesAgGrid}></Route>
           <Route path="cafes/create" Component={CreateCafe}></Route>
           <Route path="employees" Component={Employees}></Route>
+          <Route path="employeesaggrid" Component={EmployeesAgGrid}></Route>
           <Route path="employees/create" Component={CreateEmployee}></Route>
           <Route path="*" Component={NotFoundView}></Route>
         </Routes>

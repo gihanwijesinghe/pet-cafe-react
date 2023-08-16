@@ -60,7 +60,7 @@ const CreateEmployee: React.FC = () => {
       } else {
         await EmployeeService.postEmployee(form);
       }
-      navigate("/employees");
+      navigate("/employeesaggrid");
     } catch {
     } finally {
       setLoading(false);
@@ -78,7 +78,7 @@ const CreateEmployee: React.FC = () => {
   };
 
   const onCancel = () => {
-    navigate("/employees");
+    navigate("/employeesaggrid");
   };
 
   const emailValidation = (txt: string) => {
@@ -87,6 +87,7 @@ const CreateEmployee: React.FC = () => {
 
   return (
     <Grid style={{ paddingTop: 20 }} container spacing={2} direction={"column"} alignContent={"center"}>
+      <h2>{editMode ? "Edit Employee" : "Create Employee"}</h2>
       <Grid item>
         <TextField
           label={"Name"}

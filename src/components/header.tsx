@@ -10,12 +10,15 @@ const Header: React.FC = () => {
       {/* <Link style={{ paddingLeft: 20 }} to="/cafes">
         Cafes
       </Link> */}
-      <Link style={{ paddingLeft: 20 }} to="/employees">
+      {/* <Link style={{ paddingLeft: 20 }} to="/employees">
         Employees
-      </Link>
+      </Link> */}
 
       <Link style={{ paddingLeft: 20 }} to="/cafesaggrid">
         Cafes Ag grid
+      </Link>
+      <Link style={{ paddingLeft: 20 }} to="/employeesaggrid">
+        Employees Ag grid
       </Link>
     </div>
   );

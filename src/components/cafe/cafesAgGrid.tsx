@@ -1,5 +1,3 @@
-import "ag-grid-community/styles/ag-theme-alpine.css";
-import "ag-grid-community/styles/ag-grid.css";
 import React from "react";
 import AgGrid from "../common.tsx/agGrid";
 import CafeService, { CafePut, CafeResponse } from "../../services/cafeService";
