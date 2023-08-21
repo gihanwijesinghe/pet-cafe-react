@@ -1,3 +1,5 @@
+import { baseUrl } from "./baseService";
+
 export interface CafeResponse {
   id: string;
   name: string;
@@ -16,9 +18,10 @@ export interface CafePut extends CafePost {
   id: string;
 }
 
+const cafeUrl = baseUrl + "cafes";
 const CafeService = {
   getCafes: (location?: string) => {
-    return fetch(`https://localhost:7122/api/cafes?location=${location ?? ""}`)
+    return fetch(`${cafeUrl}?location=${location ?? ""}`)
       .then((res) => res.json())
       .then((res) => res as CafeResponse[]);
   },
@@ -30,7 +33,7 @@ const CafeService = {
       body: JSON.stringify(cafePost),
     };
 
-    return fetch("https://localhost:7122/api/cafes", requestOptions)
+    return fetch(`${cafeUrl}`, requestOptions)
       .then((res) => res.json())
       .then((res) => res as any);
   },
@@ -42,7 +45,7 @@ const CafeService = {
       body: JSON.stringify(cafePut),
     };
 
-    return fetch(`https://localhost:7122/api/cafes/${cafePut.id}`, requestOptions);
+    return fetch(`${cafeUrl}/${cafePut.id}`, requestOptions);
   },
 
   deleteCafe: (id: string) => {
@@ -51,7 +54,7 @@ const CafeService = {
       headers: { "Content-Type": "application/json" },
     };
 
-    return fetch(`https://localhost:7122/api/cafes/${id}`, requestOptions);
+    return fetch(`${cafeUrl}/${id}`, requestOptions);
   },
 };
 

@@ -1,3 +1,5 @@
+import { baseUrl } from "./baseService";
+
 export interface EmployeeResponse extends EmployeePost {
   id: string;
   daysWorked: number;
@@ -23,9 +25,10 @@ export enum EmployeeGender {
   Female = 2,
 }
 
+const employeeUrl = baseUrl + "employees";
 const EmployeeService = {
   getEmployees: (cafe?: string) => {
-    return fetch(`https://localhost:7122/api/employees?cafe=${cafe ?? ""}`)
+    return fetch(`${employeeUrl}?cafe=${cafe ?? ""}`)
       .then((res) => res.json())
       .then((res) => res as EmployeeResponse[]);
   },
@@ -37,7 +40,7 @@ const EmployeeService = {
       body: JSON.stringify(employeePost),
     };
 
-    return fetch("https://localhost:7122/api/employees", requestOptions)
+    return fetch(employeeUrl, requestOptions)
       .then((res) => res.json())
       .then((res) => res as any);
   },
@@ -49,7 +52,7 @@ const EmployeeService = {
       body: JSON.stringify(employeePut),
     };
 
-    return fetch(`https://localhost:7122/api/employees/${employeePut.id}`, requestOptions);
+    return fetch(`${employeeUrl}/${employeePut.id}`, requestOptions);
   },
 
   deleteEmployee: (id: string) => {
@@ -58,7 +61,7 @@ const EmployeeService = {
       headers: { "Content-Type": "application/json" },
     };
 
-    return fetch(`https://localhost:7122/api/employees/${id}`, requestOptions);
+    return fetch(`${employeeUrl}/${id}`, requestOptions);
   },
 };
 
